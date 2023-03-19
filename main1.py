@@ -22,7 +22,7 @@ rnd=0
 def main():
 
     msg = "Нажмите пробел для фотоснимка, \'q\' для закрытия.."
-    mb.showerror("Инфо.", msg)
+    mb.showinfo("Инфо.", msg)
 
     face_cascade_db = cv2.CascadeClassifier("Face.xml")
     cap=cv2.VideoCapture(0)
