@@ -17,12 +17,15 @@ def import_img():
     for file in os.listdir(path_s):
         if file.endswith(".png") or file.endswith(".jpg") or file.endswith(".jpeg"):
             os.replace(path_s + file, path_d + file)
-
-
+rnd=0
+#img_counter = 0
 def main():
+
+    msg = "Нажмите пробел для фотоснимка, \'q\' для закрытия.."
+    mb.showerror("Ошибка.", msg)
+
     face_cascade_db = cv2.CascadeClassifier("Face.xml")
     cap=cv2.VideoCapture(0)
-    img_counter = 0
     while True:
         success, img = cap.read()
         img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -41,9 +44,9 @@ def main():
             break
         elif k % 256 == 32:
             # SPACE pressed
-            img_name = "opencv_frame_{}.png".format(img_counter)
+            img_name = "opencv_frame_0.png"
             cv2.imwrite(img_name, frame)
-            img_counter += 1
+            #img_counter += 1
     cap.release()
     cv2.destroyAllWindows()
     import_img()
@@ -55,21 +58,16 @@ def main():
     final = result[0]
 
     for i in range(1, final):
-        # print(bdmain.read_blob_data(i))
-        #!!!!!!!!!
-        #bdmain.read_blob_data(i)
-        # img=cursor.fetchone()['photo']
-        # bdmain.whriteAva("tmpBd/",img)
-
-
         if comparison.compare_faces("tmp/opencv_frame_0.png", bdmain.read_blob_data(i)):
             checkImgBd.vivod("tmp/opencv_frame_0.png", 0, 255, 0)
             break
         if i + 1 == final:
             checkImgBd.vivod("tmp/opencv_frame_0.png", 0, 0, 255)
             flag=messagebox.askquestion("Confirm","Добавить в БД?")
-            rnd=1
+            global rnd
             if(flag=='yes'):
-                bdmain.insert_blob(None,"tmp/opencv_frame_0"+str(rnd)+".png","tmp/opencv_frame_0.png")
+                bdmain.insert_blob(None,"tmp/opencv_frame_"+str(rnd)+".png","tmp/opencv_frame_0.png")
                 rnd+=1
             break
+    path = os.path.join("tmp", "opencv_frame_0.png")
+    os.remove(path)

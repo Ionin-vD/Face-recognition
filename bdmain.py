@@ -63,7 +63,7 @@ def read_blob_data(emp_id):
         for row in record:
             name = row[1]
             photo = row[2]
-            photo_path = os.path.join("tmpBd", name)
+            photo_path = os.path.join(name)
 
             # os.remove("tmpBd/tmp.png")
             # cursor.execute("SELECT photo FROM pathname WHERE id > 0 LIMIT 100")
