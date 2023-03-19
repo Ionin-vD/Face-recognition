@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import sqlite3
 import tkinter.messagebox as mb
-from tkinter import filedialog
+from tkinter import filedialog, messagebox
 from tkinter import ttk
 from tkinter import *
 import main1
@@ -11,7 +11,7 @@ import checkImgBd
 
 
 
-def butClickLoad():
+def butClickLoad(event):#выбрать фото
     filepath = filedialog.askopenfilename()
     if filepath != "":
         some_string = filepath
@@ -26,20 +26,27 @@ def butClickLoad():
             result = cursor.fetchone()
             final = result[0]
             for i in range(1,final):
-                if comparison.compare_faces(filepath, bdmain.read_blob_data(i)):
+                bdmain.read_blob_data(i)
+                if comparison.compare_faces(filepath, "tmpBd/tmp.png"):
                     checkImgBd.vivod(filepath,0,255,0)
                     break
                 if i+1==final:
                     checkImgBd.vivod(filepath,0,0,255)
+                    #checkImgBd.vivod("tmp/opencv_frame_0.png", 0, 0, 255)
+                    flag=messagebox.askquestion("Confirm","Добавить в БД?")
+                    rnd=1
+                    if(flag=='yes'):
+                        bdmain.insert_blob(None,"tmp/opencv_frame_0"+str(rnd)+".png","tmp/opencv_frame_0.png")
+                        rnd+=1
                     break
     else:
         msg = "Вы не выбрали фото."
         mb.showerror("Ошибка.", msg)
 
-def butMakeImg():
+def butMakeImg(event):
     main1.main()
 
-def butChuceImg():
+def butChuceImg(event):
     filepath = filedialog.askopenfilename()
     if filepath != "":
         some_string = filepath

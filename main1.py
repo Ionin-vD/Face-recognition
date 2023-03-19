@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import sqlite3
+import tkinter
 import tkinter.messagebox as mb
+from tkinter import messagebox
 
 import cv2
 import os
@@ -59,12 +61,23 @@ def main():
     cursor.execute("SELECT count(*) FROM pathname")
     result = cursor.fetchone()
     final = result[0]
-    # !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
     for i in range(1, final):
         # print(bdmain.read_blob_data(i))
-        if comparison.compare_faces("tmp/opencv_frame_0.png", bdmain.read_blob_data(i)):
+        #!!!!!!!!!
+        #bdmain.read_blob_data(i)
+        # img=cursor.fetchone()['photo']
+        # bdmain.whriteAva("tmpBd/",img)
+
+        bdmain.read_blob_data(i)
+        if comparison.compare_faces("tmp/opencv_frame_0.png", "tmpBd/tmp.png"):
             checkImgBd.vivod("tmp/opencv_frame_0.png", 0, 255, 0)
             break
         if i + 1 == final:
             checkImgBd.vivod("tmp/opencv_frame_0.png", 0, 0, 255)
+            flag=messagebox.askquestion("Confirm","Добавить в БД?")
+            rnd=1
+            if(flag=='yes'):
+                bdmain.insert_blob(None,"tmp/opencv_frame_0"+str(rnd)+".png","tmp/opencv_frame_0.png")
+                rnd+=1
             break

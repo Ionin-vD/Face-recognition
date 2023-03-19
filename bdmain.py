@@ -53,6 +53,7 @@ def insert_blob(emp_id, name, photo):
 def read_blob_data(emp_id):
     try:
         sqlite_connection = sqlite3.connect('Base.db')#Установить SQLite-соединение с базой данных из Python
+        sqlite_connection.row_factory=sqlite3.Row
         cursor = sqlite_connection.cursor()#Создать объект cursor из объекта соединения
         #Создать SELECT-запрос для получения BLOB-колонок из таблицы
         sql_fetch_blob_query = """SELECT * from pathname where id = ?"""
@@ -62,7 +63,11 @@ def read_blob_data(emp_id):
             name = row[1]
             photo = row[2]
             photo_path = os.path.join("tmpBd", name)
-            return write_to_file(photo, photo_path)
+            os.remove("tmpBd/tmp.png")
+            cursor.execute("SELECT photo FROM pathname LIMIT 1")
+            img=cursor.fetchone()['photo']
+            whriteAva("tmpBd/tmp.png",img)
+            #return write_to_file(photo, photo_path)
         cursor.close()#Закрыть объект cursor и соединение
 
     except sqlite3.Error as error:
@@ -71,3 +76,11 @@ def read_blob_data(emp_id):
     finally:
         if sqlite_connection:
             sqlite_connection.close()
+
+def whriteAva(filepath,img):
+    try:
+        with open(filepath, "wb") as f:
+            f.write(img)
+            #return filepath
+    except IOError as e:
+        print(e)
