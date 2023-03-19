@@ -69,8 +69,8 @@ def main():
         # img=cursor.fetchone()['photo']
         # bdmain.whriteAva("tmpBd/",img)
 
-        bdmain.read_blob_data(i)
-        if comparison.compare_faces("tmp/opencv_frame_0.png", "tmpBd/tmp.png"):
+
+        if comparison.compare_faces("tmp/opencv_frame_0.png", bdmain.read_blob_data(i)):
             checkImgBd.vivod("tmp/opencv_frame_0.png", 0, 255, 0)
             break
         if i + 1 == final:

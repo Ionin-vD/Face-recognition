@@ -26,8 +26,7 @@ def butClickLoad(event):#выбрать фото
             result = cursor.fetchone()
             final = result[0]
             for i in range(1,final):
-                bdmain.read_blob_data(i)
-                if comparison.compare_faces(filepath, "tmpBd/tmp.png"):
+                if comparison.compare_faces(filepath, bdmain.read_blob_data(i)):
                     checkImgBd.vivod(filepath,0,255,0)
                     break
                 if i+1==final:
@@ -36,7 +35,7 @@ def butClickLoad(event):#выбрать фото
                     flag=messagebox.askquestion("Confirm","Добавить в БД?")
                     rnd=1
                     if(flag=='yes'):
-                        bdmain.insert_blob(None,"tmp/opencv_frame_0"+str(rnd)+".png","tmp/opencv_frame_0.png")
+                        bdmain.insert_blob(None,filepath,filepath)
                         rnd+=1
                     break
     else:
